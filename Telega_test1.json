@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-04T01:17:06.984Z",
+  "updatedAt": "2026-03-06T18:53:38.087Z",
   "createdAt": "2026-02-17T23:04:28.960Z",
   "id": "1Upq1OnwU63IFdOj",
   "name": "Telega_test1",
@@ -275,6 +275,19 @@
       "id": "2681001d-3366-48fa-aae7-745cf2797003",
       "name": "Simple Memory",
       "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -464,
+        -336
+      ],
+      "id": "26899bf4-ffd2-46ed-b6b0-6cb55f36cb53",
+      "name": "AI Agent1"
     }
   ],
   "connections": {
@@ -394,7 +407,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "65a5e954-9957-4632-9fa5-6055a3a69eee",
+  "versionId": "fe74ee15-cb96-4e24-8aa3-d05bfa42406c",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
