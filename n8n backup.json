@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T14:30:31.133Z",
+  "updatedAt": "2026-03-06T16:29:11.807Z",
   "createdAt": "2026-03-05T17:23:43.543Z",
   "id": "k7vBT4jHA90dgL3H",
   "name": "n8n backup",
@@ -118,19 +118,121 @@
     },
     {
       "parameters": {
-        "operation": "toJson",
-        "options": {
-          "fileName": "={{ $json.name }}.json"
-        }
+        "options": {}
       },
-      "type": "n8n-nodes-base.convertToFile",
-      "typeVersion": 1.1,
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
       "position": [
-        512,
+        720,
         -48
       ],
-      "id": "ad3c508a-9e1e-4b4e-8304-e6a6f43c0c90",
-      "name": "Convert to File"
+      "id": "14abf208-5f3b-48de-951c-75c7d6e783ff",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a33382c6-c2db-41e0-a085-85a5f1284e00",
+              "leftValue": "={{ $('Aggregate').first().json.name }}",
+              "rightValue": "={{ $json.name + '.json' }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        -32
+      ],
+      "id": "b52816c0-7cb6-4d27-a9b5-f059040c30ad",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "iztokio",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "N8N_beckap",
+          "mode": "list",
+          "cachedResultName": "N8N_beckap",
+          "cachedResultUrl": "https://github.com/iztokio/N8N_beckap"
+        },
+        "filePath": "={{ $json.name + '.json' }}",
+        "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+        "commitMessage": "={{ $('Edit Fields').first().json.commit_message }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        64
+      ],
+      "id": "ba9b308d-8620-4e9f-a186-866a9d2377d0",
+      "name": "Create a file",
+      "webhookId": "bac5717b-67e8-411c-8a49-2bd1e7dd790f",
+      "credentials": {
+        "githubApi": {
+          "id": "9QHEKmcZ9bEnDu1z",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "iztokio",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "N8N_beckap",
+          "mode": "list",
+          "cachedResultName": "N8N_beckap",
+          "cachedResultUrl": "https://github.com/iztokio/N8N_beckap"
+        },
+        "filePath": "={{ $json.name + '.json' }}",
+        "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+        "commitMessage": "={{ $('Edit Fields').first().json.commit_message }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        -272
+      ],
+      "id": "ff49eaf1-7c9e-4c92-a37c-688382c37de1",
+      "name": "Edit a file",
+      "webhookId": "311042bd-1cf6-4557-806d-8d74da94cc34",
+      "credentials": {
+        "githubApi": {
+          "id": "9QHEKmcZ9bEnDu1z",
+          "name": "GitHub account"
+        }
+      }
     }
   ],
   "connections": {
@@ -182,7 +284,59 @@
       "main": [
         [
           {
-            "node": "Convert to File",
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a file": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -195,9 +349,11 @@
     "availableInMCP": false
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "7dfd7382-199d-46cf-94c1-20a917dc0f86",
+  "versionId": "765dcde9-f5a3-406a-8a3e-c0f51d8910b0",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
